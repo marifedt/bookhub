@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+    <h1>BookHub</h1>
+    <p>Have a look at the books I've read so far</p>
+
+    <!-- List of Books -->
+    <section class="books">
+        <% if (books.length===0) {%>
+            <p>No books to display yet.</p>
+            <% } else { %>
+                <!-- List of Books -->
+                <% books.forEach((book, i)=> {%>
+                    <article class="book">
+                        <img src='<%= bookCoverUrls[i] %>' alt="Cover of <%= book.title %>" />
+                        <h2>
+                            <%= book.title %> by <%= book.author_name %>
+                        </h2>
+                        <small>Date read: <%= book.formatted_date %>. Rating: <%=book.rating%>/10</small>
+
+                        <h3>Summary</h3>
+                        <p>
+                            <%= book.summary %>
+                        </p>
+                        <a href="/books/<%= book.isbn %>">See my notes about this book</a>
+                    </article>
+                    <% }); %>
+                        <% } %>
+    </section>
+
+    <%- include('../partials/footer') %>

@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+    <section class="bookNotes">
+        <img src="<%=bookCoverUrl %>" alt="Book cover of <%= book.title %>" srcset="">
+        <h1>
+            <%= book.title %> by <%= book.author_name %>
+        </h1>
+        <h4>ISBN: <%= book.isbn %>
+        </h4>
+        <h4>Date Read: <%= book.formatted_date %>
+        </h4>
+        <h4>Rating: <%= book.rating %>/10</h4>
+
+        <h2>Summary</h2>
+        <p>
+            <%= book.summary %>
+        </p>
+
+        <h2>Notes</h2>
+        <% if(notes.length===0) { %>
+            <p>No notes to display</p>
+            <% } else { %>
+                <% notes.forEach((note, i)=> {%>
+                    <article class="note">
+                        <p>
+                            <%= note.content %>
+                        </p>
+                        <small>Written on: <%= note.formatted_date %></small>
+                    </article>
+                    <% }); %>
+                        <% } %>
+    </section>
+
+    <%- include('../partials/footer') %>
