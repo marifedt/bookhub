@@ -74,6 +74,32 @@ const formatDates = async (collection, propertyName) => {
   return Promise.all(datesPromises);
 };
 
+const formatTitleAndAuthor = async (books) => {
+  const booksPromises = books.map(async (book) => {
+    return {
+      ...book,
+      title: capitalizeWords(book.title),
+      author_name: capitalizeWords(book.author_name),
+    };
+  });
+
+  return Promise.all(booksPromises);
+};
+
+const capitalizeWords = (str) => {
+  if (!str) return '';
+
+  const words = str.split(' ');
+
+  const capitalizedWords = words.map((word) => {
+    const firstLetter = word.charAt(0).toUpperCase();
+    const restOfWord = word.slice(1);
+    return firstLetter + restOfWord;
+  });
+
+  return capitalizedWords.join(' ');
+};
+
 // ROUTES
 app.get('/', async (req, res) => {
   try {
@@ -85,9 +111,10 @@ ORDER BY read_date DESC`;
     const books = result.rows;
     const bookCoverUrls = await preloadImagesForRendering(books);
     const booksWithFormattedDates = await formatDates(books, 'read_date');
+    const formattedBooks = await formatTitleAndAuthor(booksWithFormattedDates);
 
     res.render('books/index.ejs', {
-      books: booksWithFormattedDates,
+      books: formattedBooks,
       bookCoverUrls,
     });
   } catch (error) {
@@ -106,10 +133,14 @@ app.get('/books/:olid', async (req, res) => {
     // Get book details
     let result = await db.query(bookQuery);
     const book = result.rows[0];
+
     // Get image from Open Library and preload it.
     const bookCoverUrl = await preloadImagesForRendering([book]);
     // Format the date
     const bookWithFormattedDate = await formatDates([book], 'read_date');
+
+    // Format the title and author
+    const formattedBook = await formatTitleAndAuthor(bookWithFormattedDate);
 
     // Get notes for the book
     result = await db.query(`SELECT * FROM note WHERE book_id = ${book.id}`);
@@ -117,7 +148,7 @@ app.get('/books/:olid', async (req, res) => {
     const notesWithFormattedDates = await formatDates(notes, 'created_at');
 
     res.render('books/note.ejs', {
-      book: bookWithFormattedDate[0],
+      book: formattedBook[0],
       notes: notesWithFormattedDates,
       bookCoverUrl,
     });
@@ -130,8 +161,62 @@ app.get('/new', (req, res) => {
   res.render('books/new.ejs');
 });
 
-app.post('/new', (req, res) => {
-  console.log(req.body);
+app.post('/new', async (req, res) => {
+  const author = req.body.author.toLowerCase();
+  const title = req.body.title.toLowerCase();
+  const { readDate, rating, summary } = req.body;
+
+  try {
+    const response = await axios.get(
+      `https://openlibrary.org/search.json?title=${title}&author=${author}&limit=1`
+    );
+
+    // Book exists
+    if (response.data.numFound > 0) {
+      const bookData = response.data.docs[0];
+      const olid = bookData.cover_edition_key;
+
+      console.log('Book exists!! continue adding it');
+      console.log(`OLID IS: ${olid}`);
+
+      // Search if author already exists and return author id
+      let result = await db.query('SELECT id FROM author WHERE name = $1', [
+        author,
+      ]);
+
+      if (result.rows.length === 0) {
+        // Author doesn't exist on DB
+        result = await db.query(
+          'INSERT INTO author (name) VALUES($1) RETURNING *',
+          [author]
+        );
+      }
+
+      const author_id = result.rows[0].id;
+
+      // Search if OLID exists
+      result = await db.query('SELECT olid FROM book WHERE olid = $1', [olid]);
+
+      if (result.rows.length === 0) {
+        // Book doesn't exist. So I could add.
+        result = await db.query(
+          'INSERT INTO book (olid, title, read_date, rating, summary, author_id) VALUES ($1, $2, $3, $4, $5, $6)',
+          [olid, title, readDate, rating, summary, author_id]
+        );
+        res.redirect('/');
+      } else {
+        res.render('books/new.ejs', {
+          error: 'The book already exists',
+        });
+      }
+    } else {
+      res.render('books/new.ejs', {
+        error: 'The book you entered does not exist',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Handle 404 Requests

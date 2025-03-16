@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+    <% if (typeof error !=='undefined' && error) { %>
+        <section>
+            <h1>
+                <%= error %>
+            </h1>
+        </section>
+        <% } %>
+            <section>
+                <form action="/new" method="post">
+                    <label for="title">Book Title:</label>
+                    <input type="text" name="title" id="title" required /><br /> <br />
+
+                    <label for="readDate">Date when you first read it: </label>
+                    <input type="date" name="readDate" id="readDate" required><br /> <br />
+
+                    <label for="rating">Rate from 1-10:</label>
+                    <input type="number" name="rating" id="rating" min="1" max="10" required><br /> <br />
+
+                    <label for="summary">Book summary:</label>
+                    <textarea name="summary" id="summary" required></textarea><br /> <br />
+
+                    <label for="author">Author's name:</label>
+                    <input type="text" id="author" name="author" required><br /> <br />
+
+                    <button type="submit">Add Book</button>
+                </form>
+            </section>
+
+            <script>
+                window.onload = () => {
+                    //add event listener to prevent the default behavior
+                    const ratingInput = document.querySelector('#rating');
+                    ratingInput.addEventListener("keypress", (event) => {
+                        event.preventDefault();
+                    });
+                };
+                const datePicker = document.querySelector('#readDate');
+                datePicker.max = new Date().toISOString().split("T")[0];
+            </script>
+            <%- include('../partials/footer') %>
