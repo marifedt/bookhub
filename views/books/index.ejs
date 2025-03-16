@@ -20,10 +20,12 @@
                         <p>
                             <%= book.summary %>
                         </p>
-                        <a href="/books/<%= book.isbn %>">See my notes about this book</a>
+                        <a href="/books/<%= book.olid %>">See my notes about this book</a>
                     </article>
                     <% }); %>
                         <% } %>
     </section>
+
+
 
     <%- include('../partials/footer') %>

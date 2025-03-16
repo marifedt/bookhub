@@ -38,7 +38,7 @@ const preloadImage = (url) => {
 //Preload Images for All Books
 const preloadImagesForRendering = async (books) => {
   const preloadPromises = books.map(async (book) => {
-    const imageUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
+    const imageUrl = `https://covers.openlibrary.org/b/olid/${book.olid}-M.jpg`;
     const result = await preloadImage(imageUrl);
 
     // Logging
@@ -77,7 +77,7 @@ const formatDates = async (collection, propertyName) => {
 // ROUTES
 app.get('/', async (req, res) => {
   try {
-    const BOOKS_QUERY = `SELECT book.id, book.isbn, book.title, book.read_date, book.rating, book.summary, author.name as "author_name", author.id as "author_id" FROM book
+    const BOOKS_QUERY = `SELECT book.id, book.olid, book.title, book.read_date, book.rating, book.summary, author.name as "author_name", author.id as "author_id" FROM book
 JOIN author on author.id = book.author_id
 ORDER BY read_date DESC`;
     const result = await db.query(BOOKS_QUERY);
@@ -95,12 +95,12 @@ ORDER BY read_date DESC`;
   }
 });
 
-app.get('/books/:isbn', async (req, res) => {
+app.get('/books/:olid', async (req, res) => {
   try {
-    const isbn = req.params.isbn;
-    const bookQuery = `SELECT book.id, book.isbn, book.title, book.read_date, book.rating, book.summary, author.name as "author_name", author.id as "author_id" FROM book
+    const olid = req.params.olid;
+    const bookQuery = `SELECT book.id, book.olid, book.title, book.read_date, book.rating, book.summary, author.name as "author_name", author.id as "author_id" FROM book
                       JOIN author on author.id = book.author_id
-                      WHERE book.isbn = '${isbn}'
+                      WHERE book.olid = '${olid}'
                       ORDER BY read_date DESC`;
 
     // Get book details
@@ -124,6 +124,14 @@ app.get('/books/:isbn', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.get('/new', (req, res) => {
+  res.render('books/new.ejs');
+});
+
+app.post('/new', (req, res) => {
+  console.log(req.body);
 });
 
 // Handle 404 Requests
