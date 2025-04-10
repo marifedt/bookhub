@@ -1,0 +1,24 @@
+DROP TABLE IF EXISTS author, book, note;
+
+CREATE TABLE author(
+id SERIAL PRIMARY KEY,
+name VARCHAR(70) NOT NULL
+);
+
+CREATE TABLE book (
+    id SERIAL PRIMARY KEY,
+    olid TEXT UNIQUE,
+    title VARCHAR(100) NOT NULL,
+    read_date DATE,
+    rating INTEGER CHECK (rating BETWEEN 1 AND 10),
+    summary VARCHAR(200),
+    author_id INTEGER REFERENCES author(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE note(
+id SERIAL PRIMARY KEY,
+content TEXT NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+book_id INTEGER REFERENCES book(id)
+);
