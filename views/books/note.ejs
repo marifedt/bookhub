@@ -15,6 +15,10 @@
             <%= book.summary %>
         </p>
 
+        <a href="/edit/<%=book.olid%>">Edit Book Details</a>
+        <a href="/delete/<%=book.olid%>">Delete Book</a>
+
+
         <h2>Notes</h2>
         <% if(notes.length===0) { %>
             <p>No notes to display</p>

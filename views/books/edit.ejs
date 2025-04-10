@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+    <% if (typeof error !=='undefined' && error) { %>
+        <section>
+            <h1>
+                <%= error %>
+            </h1>
+        </section>
+        <% } %>
+
+            <section>
+                <form action="/edit/<%=book.olid %>" method="post">
+                    <label for="title">Book Title: <%=book.title%></label>
+                    <input type="text" name="title" id="title" value="<%=book.title%>" hidden /><br /> <br />
+
+                    <label for="author">Author: <%=book.author_name%></label>
+                    <input type="text" id="author" name="author" value="<%=book.author_name%>" hidden><br />
+                    <br />
+
+                    <label for="readDate">Date when you first read it: </label>
+                    <input type="date" name="readDate" id="readDate" value="<%=book.read_date%>" required><br /> <br />
+
+                    <label for="rating">Rate from 1-10:</label>
+                    <input type="number" name="rating" id="rating" min="1" max="10" value="<%=book.rating%>"
+                        required><br /> <br />
+
+                    <label for="summary">Book summary:</label>
+                    <textarea name="summary" id="summary" required><%= book.summary %></textarea><br /> <br />
+
+
+
+                    <button type="submit">Update Book</button>
+                </form>
+            </section>
+
+            <script>
+                window.onload = () => {
+                    //add event listener to prevent the default behavior
+                    const ratingInput = document.querySelector('#rating');
+                    ratingInput.addEventListener("keypress", (event) => {
+                        event.preventDefault();
+                    });
+                };
+                const datePicker = document.querySelector('#readDate');
+                datePicker.max = new Date().toISOString().split("T")[0];
+            </script>
+            <%- include('../partials/footer') %>

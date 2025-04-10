@@ -161,6 +161,26 @@ app.get('/new', (req, res) => {
   res.render('books/new.ejs');
 });
 
+app.get('/edit/:olid', async (req, res) => {
+  const olid = req.params.olid;
+  const bookQuery = `SELECT book.id, book.olid, book.title, book.read_date, book.rating, book.summary, author.name as "author_name", author.id as "author_id" FROM book
+                      JOIN author on author.id = book.author_id
+                      WHERE book.olid = '${olid}'
+                    `;
+  try {
+    // Get book details
+    let result = await db.query(bookQuery);
+    const book = result.rows[0];
+    book.read_date = new Date(book.read_date).toISOString().split('T')[0];
+    const formattedBook = await formatTitleAndAuthor([book]);
+    res.render('books/edit.ejs', {
+      book: formattedBook[0],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.post('/new', async (req, res) => {
   const author = req.body.author.toLowerCase();
   const title = req.body.title.toLowerCase();
@@ -214,6 +234,35 @@ app.post('/new', async (req, res) => {
         error: 'The book you entered does not exist',
       });
     }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post('/edit/:olid', async (req, res) => {
+  const { title, author, readDate, rating, summary } = req.body;
+  const olid = req.params.olid;
+
+  try {
+    //Get author_id from author name
+    let result = await db.query('SELECT id FROM author WHERE name = $1', [
+      author.toLowerCase(),
+    ]);
+
+    if (result.rows.length === 0) {
+      //Author doesn't exist on DB
+      result = await db.query(
+        'INSERT INTO author (name) VALUES($1) RETURNING *',
+        [author.toLowerCase()]
+      );
+    }
+    const author_id = result.rows[0].id;
+
+    result = await db.query(
+      'UPDATE book SET title = $1, author_id = $2, read_date = $3, rating = $4, summary = $5 WHERE olid = $6',
+      [title, author_id, readDate, rating, summary, olid]
+    );
+    res.redirect(`/books/${olid}`);
   } catch (error) {
     console.log(error);
   }
