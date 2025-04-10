@@ -26,7 +26,7 @@
             <p>No notes to display</p>
             <% } else { %>
                 <% notes.forEach((note, i)=> {%>
-                    <article class="note">
+                    <article class="note" data-id="<%= note._id %>">
                         <p>
                             <%= note.content %>
                         </p>
@@ -34,6 +34,12 @@
                     </article>
                     <% }); %>
                         <% } %>
+                            <form action="/books/<%=book.olid%>/note" method="post">
+                                <label for="note">Add a note:</label>
+                                <textarea name="note" id="note" required></textarea><br /> <br />
+
+                                <button type="submit">Add Note</button>
+                            </form>
     </section>
 
     <%- include('../partials/footer') %>
