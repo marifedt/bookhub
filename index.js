@@ -268,6 +268,26 @@ app.post('/edit/:olid', async (req, res) => {
   }
 });
 
+app.post('/delete/:olid', async (req, res) => {
+  const olid = req.params.olid;
+  try {
+    // Search id of the book using OLID
+    const result = await db.query('SELECT id FROM book WHERE olid = $1', [
+      olid,
+    ]);
+
+    const bookId = result.rows[0].id;
+    // Delete notes associated with the book
+    await db.query('DELETE FROM note WHERE book_id = $1', [bookId]);
+
+    // Delete book
+    await db.query('DELETE FROM book WHERE id = $1', [bookId]);
+    res.redirect('/');
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // Handle 404 Requests
 app.use((req, res) => {
   res.status(404).send('Page Not Found');

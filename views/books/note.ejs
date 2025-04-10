@@ -16,7 +16,9 @@
         </p>
 
         <a href="/edit/<%=book.olid%>">Edit Book Details</a>
-        <a href="/delete/<%=book.olid%>">Delete Book</a>
+        <form action="/delete/<%=book.olid%>" method="post">
+            <button type="submit">Delete</button>
+        </form>
 
 
         <h2>Notes</h2>
