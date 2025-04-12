@@ -5,16 +5,19 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tailwind:css": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch",
+    "dev": "nodemon index.js"
   },
   "author": "Marife Dela Torre",
   "license": "ISC",
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.3",
     "axios": "^1.8.2",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "tailwindcss": "^4.1.3"
   }
 }

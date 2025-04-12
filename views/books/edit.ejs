@@ -1,35 +1,60 @@
 <%- include('../partials/header') %>
 
     <% if (typeof error !=='undefined' && error) { %>
-        <section>
-            <h1>
+        <section class="bg-red-100 p-4 mb-6 rounded">
+            <h1 class="text-red-600 font-bold text-xl">
                 <%= error %>
             </h1>
         </section>
         <% } %>
 
-            <section>
+            <section class="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Edit Book Details</h2>
                 <form action="/edit/<%=book.olid %>" method="post">
-                    <label for="title">Book Title: <%=book.title%></label>
-                    <input type="text" name="title" id="title" value="<%=book.title%>" hidden /><br /> <br />
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="title">Book Title: <%=book.title%>
+                        </label>
+                        <input
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="text" name="title" id="title" value="<%=book.title%>" hidden />
+                    </div>
 
-                    <label for="author">Author: <%=book.author_name%></label>
-                    <input type="text" id="author" name="author" value="<%=book.author_name%>" hidden><br />
-                    <br />
-
-                    <label for="readDate">Date when you first read it: </label>
-                    <input type="date" name="readDate" id="readDate" value="<%=book.read_date%>" required><br /> <br />
-
-                    <label for="rating">Rate from 1-10:</label>
-                    <input type="number" name="rating" id="rating" min="1" max="10" value="<%=book.rating%>"
-                        required><br /> <br />
-
-                    <label for="summary">Book summary:</label>
-                    <textarea name="summary" id="summary" required><%= book.summary %></textarea><br /> <br />
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="author">Author:
+                            <%=book.author_name%>
+                        </label>
+                        <input
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="text" id="author" name="author" value="<%=book.author_name%>" hidden>
+                    </div>
 
 
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="readDate">Date when you first read
+                            it: </label>
+                        <input
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="date" name="readDate" id="readDate" value="<%=book.read_date%>" required>
+                    </div>
 
-                    <button type="submit">Update Book</button>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="rating">Rate from 1-10:</label>
+                        <input
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            type="number" name="rating" id="rating" min="1" max="10" value="<%=book.rating%>" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="summary">Book summary:</label>
+                        <textarea
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                            name="summary" id="summary" required><%= book.summary %></textarea>
+                    </div>
+
+
+
+                    <button class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                        type="submit">Update Book</button>
                 </form>
             </section>
 

@@ -1,29 +1,36 @@
 <%- include('../partials/header') %>
-    <h1>BookHub</h1>
-    <p>Have a look at the books I've read so far</p>
+    <h1 class="text-4xl font-bold text-center my-8">BookHub</h1>
+    <p class="text-xl text-center mb-8">Have a look at the books I've read so far</p>
 
     <!-- List of Books -->
-    <section class="books">
+    <section class="books max-w-6xl mx-auto p-4">
         <% if (books.length===0) {%>
-            <p>No books to display yet.</p>
+            <p class="text-center text-gray-600">No books to display yet.</p>
             <% } else { %>
                 <!-- List of Books -->
-                <% books.forEach((book, i)=> {%>
-                    <article class="book">
-                        <img src='<%= bookCoverUrls[i] %>' alt="Cover of <%= book.title %>" />
-                        <h2>
-                            <%= book.title %> by <%= book.author_name %>
-                        </h2>
-                        <small>Date read: <%= book.formatted_date %>. Rating: <%=book.rating%>/10</small>
 
-                        <h3>Summary</h3>
-                        <p>
-                            <%= book.summary %>
-                        </p>
-                        <a href="/books/<%= book.olid %>">See my notes about this book</a>
-                    </article>
-                    <% }); %>
-                        <% } %>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                    <% books.forEach((book, i)=> {%>
+                        <article class="book bg-white rounded-lg shadow-md overflow-hidden">
+                            <img class="w-full h-auto object-contain" src='<%= bookCoverUrls[i] %>'
+                                alt="Cover of <%= book.title %>" />
+                            <div class="p-4">
+                                <h2 class="text-xl font-semibold mb-2">
+                                    <%= book.title %> by <%= book.author_name %>
+                                </h2>
+                                <small class="text-sm text-gray-500">Date read: <%= book.formatted_date %>. Rating:
+                                        <%=book.rating%>/10</small>
+                                <h3 class="text-lg font-semibold mt-4">Summary</h3>
+                                <p class="text-gray-700 mt-2">
+                                    <%= book.summary %>
+                                </p>
+                                <a class="text-amber-700 hover:underline mt-4 inline-block"
+                                    href="/books/<%= book.olid %>">See my notes about this book</a>
+                            </div>
+                        </article>
+                        <% }); %>
+                            <% } %>
+                </div>
     </section>
 
 
