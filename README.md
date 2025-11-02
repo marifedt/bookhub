@@ -68,7 +68,7 @@ npm install
 ### 4. Start the Server
 
 ```bash
-    nodemon index.js
+    npm run dev
 ```
 
 Then open your browser and go to:
