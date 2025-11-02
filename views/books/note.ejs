@@ -39,11 +39,27 @@
                 <p class="text-gray-500">No notes to display</p>
                 <% } else { %>
                     <% notes.forEach((note, i)=> {%>
-                        <article class="note mb-4 p-4 border border-gray-300 rounded-md" data-id="<%= note._id %>">
-                            <p class="text-gray-700 mb-2">
+                        <article class="note mb-4 p-4 border border-gray-300 rounded-md" data-id="<%= note.id %>">
+                            <p id="noteContent-<%- note.id %>" class="text-gray-700 mb-2">
                                 <%= note.content %>
                             </p>
-                            <small class="text-sm text-gray-500">Written on: <%= note.formatted_date %></small>
+                            <small id="date-<%= note.id %>" class="text-sm text-gray-500 mr-12">Last updated on: <%= note.formatted_date %></small>
+                            <div class="ml-20" style="display: block;">
+                                <button 
+                                id="editBtn-<%= note.id %>" 
+                                onclick="toggleEdit('<%= note.id %>')"
+                                class="text-amber-600 hover:text-amber-700">
+                                Edit
+                            </button>
+                            <button
+                                id="saveBtn-<%= note.id %>"
+                                onclick="toggleEdit('<%= note.id %>')"
+                                class="text-amber-600 hover:text-amber-700"
+                                style="display:none;">
+                                Save
+                            </button>
+                            </div>
+                            
                         </article>
                         <% }); %>
                             <% } %>
@@ -61,5 +77,7 @@
             </form>
         </div>
     </section>
-
-    <%- include('../partials/footer') %>
+    <script>
+        const olid = "<%= book.olid %>";
+    </script>
+    <%- include('../partials/footer') %>y

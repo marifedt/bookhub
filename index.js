@@ -17,9 +17,8 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
-
-app.use;
 
 //Functions
 
@@ -38,7 +37,7 @@ const preloadImage = (url) => {
 //Preload Images for All Books
 const preloadImagesForRendering = async (books) => {
   const preloadPromises = books.map(async (book) => {
-    const imageUrl = `https://covers.openlibrary.org/b/olid/${book.olid}-M.jpg`;
+    const imageUrl = `https://covers.openlibrary.org/b/olid/${book.olid}-L.jpg`;
     const result = await preloadImage(imageUrl);
 
     // Logging
@@ -308,6 +307,37 @@ app.post('/books/:olid/note', async (req, res) => {
     res.redirect(`/books/${olid}`);
   } catch (error) {
     console.log(error);
+  }
+});
+
+//Edit Book Note
+app.patch('/books/:olid/note/:noteId', async (req, res) => {
+  const { content } = req.body;
+  const { noteId } = req.params;
+  try {
+    const result = await db.query(
+      'UPDATE note SET content = $1, created_at = NOW() WHERE id = $2 RETURNING created_at',
+      [content, noteId]
+    );
+    const newDate = result.rows[0].created_at;
+    console.log(newDate);
+
+    const formattedDate = new Date(newDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    console.log(formattedDate);
+
+    res.json({ 
+      success: true, 
+      formatted_date: formattedDate 
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Failed to update note.' });
   }
 });
 
