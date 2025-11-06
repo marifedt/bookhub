@@ -3,7 +3,7 @@
         <!-- Book Info -->
 
         <div class="flex items-center mb-6">
-            <img class="w-32 h-48 object-cover rounded-md mr-6" src="<%=bookCoverUrl %>"
+            <img class="w-32 h-48 object-cover rounded-md mr-6" src="<%=book.bookCoverUrl %>"
                 alt="Book cover of <%= book.title %>">
             <div>
                 <h1 class="text-3xl font-semibold text-gray-800">
@@ -80,4 +80,4 @@
     <script>
         const olid = "<%= book.olid %>";
     </script>
-    <%- include('../partials/footer') %>y
+    <%- include('../partials/footer') %>
