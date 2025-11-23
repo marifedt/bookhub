@@ -17,7 +17,7 @@ CREATE TABLE book (
     title VARCHAR(100) NOT NULL,
     read_date DATE,
     rating INTEGER CHECK (rating BETWEEN 1 AND 10),
-    summary VARCHAR(200),
+    summary TEXT,
     author_id INTEGER REFERENCES author(id) ON DELETE CASCADE,
     user_id INTEGER REFERENCES users(id)
 );
