@@ -5,7 +5,7 @@ const router = express.Router();
 //GET /- Home/All Books
 router.get('/', async (req, res) => {
     try {
-        const books = await bookService.getAllBooks();
+        const books = await bookService.getAllBooks(req.user.id);
         res.render('books/index.ejs', { books });
     } catch (err) {
         console.error(err);
@@ -17,9 +17,9 @@ router.get('/', async (req, res) => {
 router.get('/books/:olid', async (req, res) => {
     try {
         const olid = req.params.olid;
-        const data = await bookService.getBookDetails(olid);
+        const data = await bookService.getBookDetails(olid, req.user.id);
 
-        if(!data) return res.status(404).send('Book not found.');
+        if (!data) return res.status(404).send('Book not found.');
 
         res.render('books/note.ejs', {
             book: data.book,
@@ -40,10 +40,10 @@ router.get('/new', (req, res) => {
 //GET /edit/:olid
 router.get('/edit/:olid', async (req, res) => {
     try {
-        const book = await bookService.getBookForEdit(req.params.olid);
-        if(!book) return res.status(404).send('Book not found.');
+        const book = await bookService.getBookForEdit(req.params.olid, req.user.id);
+        if (!book) return res.status(404).send('Book not found.');
 
-        res.render('books/edit.ejs', {book });
+        res.render('books/edit.ejs', { book });
     } catch (err) {
         console.error(err);
         res.status(500).send('Error loading edit form.');
@@ -51,24 +51,24 @@ router.get('/edit/:olid', async (req, res) => {
 });
 
 //POST /new
-router.post('/new', async (req,res) => {
-    const {title, author, readDate, rating, summary} = req.body;
-    const result = await bookService.addNewBook(title, author, readDate, rating, summary);
+router.post('/new', async (req, res) => {
+    const { title, author, readDate, rating, summary } = req.body;
+    const result = await bookService.addNewBook(title, author, readDate, rating, summary, req.user.id);
 
-    if(result.success){
+    if (result.success) {
         res.redirect('/');
-    } else{
-        res.render('books/new.ejs' , {error: result.error});
+    } else {
+        res.render('books/new.ejs', { error: result.error });
     }
 });
 
 //POST /edit/:olid
 router.post('/edit/:olid', async (req, res) => {
-    const {title, author, readDate, rating, summary} = req.body;
+    const { title, author, readDate, rating, summary } = req.body;
     const olid = req.params.olid;
 
     try {
-        await bookService.updateBook(olid, title, author, readDate, rating, summary);
+        await bookService.updateBook(olid, title, author, readDate, rating, summary, req.user.id);
         res.redirect(`/books/${olid}`);
     } catch (err) {
         console.error(err);
@@ -79,7 +79,7 @@ router.post('/edit/:olid', async (req, res) => {
 //POST /delete/:olid
 router.post('/delete/:olid', async (req, res) => {
     try {
-        await bookService.deleteBook(req.params.olid);
+        await bookService.deleteBook(req.params.olid, req.user.id);
         res.redirect('/');
     } catch (err) {
         console.error(err);
@@ -92,7 +92,7 @@ router.post('/books/:olid/note', async (req, res) => {
     const { note } = req.body;
     const olid = req.params.olid;
     try {
-        await bookService.addNote(olid, note);
+        await bookService.addNote(olid, note, req.user.id);
         res.redirect(`/books/${olid}`);
     } catch (err) {
         console.error(err);
@@ -105,7 +105,7 @@ router.patch('/books/:olid/note/:noteId', async (req, res) => {
     const { content } = req.body;
     const { noteId } = req.params;
     try {
-        const {formattedDate} = await bookService.updateNote(noteId, content);
+        const { formattedDate } = await bookService.updateNote(noteId, content, req.user.id);
 
         res.json({
             success: true,
@@ -113,7 +113,7 @@ router.patch('/books/:olid/note/:noteId', async (req, res) => {
         })
     } catch (err) {
         console.error(err);
-        res.status(500).json({success: false, message: 'Failed to update note.'});
+        res.status(500).json({ success: false, message: 'Failed to update note.' });
     }
 })
 
