@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "tailwind:css": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Marife Dela Torre",
   "license": "ISC",
