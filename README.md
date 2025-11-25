@@ -2,7 +2,9 @@
 
 BookHub is a personal book tracker web app that lets users manage a list of books they've read, are currently reading, or plan to read. Users can add, update, delete, and view books — complete with cover images fetched using the Open Library Covers API.
 
-**Now with User Authentication and Cloud Database support!**
+**Now with User Authentication, Cloud Database, Docker, and Continuous Deployment!**
+
+🌐 **[Live Demo](https://bookhub-tyv4.onrender.com/)**
 
 ---
 
@@ -25,7 +27,10 @@ BookHub is a personal book tracker web app that lets users manage a list of book
 - 📝 **Add / Edit / Delete** book entries with personal notes or ratings
 - 📊 **Sort books** by read date
 - ☁️ **Cloud Database**: Powered by Supabase (PostgreSQL)
-- 🖼️ Display book data dynamically using **EJS templating**
+- � **Dockerized**: Containerized application for consistent deployment
+- 🧪 **Automated Testing**: Unit and integration tests with Jest and Supertest
+- 🚀 **CI/CD Pipeline**: Automated builds and deployments with GitHub Actions and Render
+- �🖼️ Display book data dynamically using **EJS templating**
 - 🔧 Built-in **error handling** for API and database operations
 
 ---
@@ -37,6 +42,9 @@ BookHub is a personal book tracker web app that lets users manage a list of book
 - **Passport.js** (Local Strategy)
 - **EJS**
 - **Axios**
+- **Docker**
+- **Jest** / **Supertest**
+- **GitHub Actions**
 - **HTML / CSS / JavaScript**
 - **Open Library Covers API**
 
@@ -78,12 +86,29 @@ SESSION_SECRET=your-secret-key
 
 ### 5. Start the Server
 
+**Option A: Run locally**
+
 ```bash
 npm run dev
 ```
 
 Then open your browser and go to:
 http://localhost:3000
+
+**Option B: Run with Docker**
+
+```bash
+docker build -t bookhub .
+docker run -p 3000:3000 --env-file .env bookhub
+```
+
+### 6. Run Tests
+
+```bash
+npm test
+```
+
+This will run the automated test suite (unit and integration tests).
 
 ---
 
