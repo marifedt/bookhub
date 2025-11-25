@@ -7,7 +7,8 @@
   "scripts": {
     "tailwind:css": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "author": "Marife Dela Torre",
   "license": "ISC",
@@ -25,5 +26,10 @@
     "passport-local": "^1.0.0",
     "pg": "^8.13.3",
     "tailwindcss": "^4.1.3"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
   }
 }
