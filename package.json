@@ -1,6 +1,6 @@
 {
   "name": "bookhub",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A place where I could share my thoughts on books I've read.",
   "main": "index.js",
   "type": "module",
