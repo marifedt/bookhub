@@ -63,17 +63,20 @@ app.use(function (err, req, res, next) {
 });
 
 //Startup Function
-async function startServer() {
-  try {
-    await connectDB();
+if (process.env.NODE_ENV !== 'test') {
+  async function startServer() {
+    try {
+      await connectDB();
 
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
+      app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+      });
 
-  } catch (err) {
-    process.exit(1);
+    } catch (err) {
+      process.exit(1);
+    }
   }
+  startServer();
 }
 
-startServer();
+export default app;
