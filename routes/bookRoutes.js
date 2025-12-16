@@ -55,8 +55,9 @@ router.post('/new', async (req, res) => {
     const { title, author, readDate, rating, summary } = req.body;
     const result = await bookService.addNewBook(title, author, readDate, rating, summary, req.user.id);
 
+
     if (result.success) {
-        res.redirect('/');
+        res.redirect('/dashboard');
     } else {
         res.render('books/new.ejs', { error: result.error });
     }
@@ -69,7 +70,7 @@ router.post('/edit/:olid', async (req, res) => {
 
     try {
         await bookService.updateBook(olid, title, author, readDate, rating, summary, req.user.id);
-        res.redirect(`/books/${olid}`);
+        res.redirect(`/dashboard/books/${olid}`);
     } catch (err) {
         console.error(err);
         res.status(500).send('Error updating book.');
@@ -80,7 +81,7 @@ router.post('/edit/:olid', async (req, res) => {
 router.post('/delete/:olid', async (req, res) => {
     try {
         await bookService.deleteBook(req.params.olid, req.user.id);
-        res.redirect('/');
+        res.redirect('/dashboard');
     } catch (err) {
         console.error(err);
         res.status(500).send('Error deleting book.');
@@ -93,7 +94,7 @@ router.post('/books/:olid/note', async (req, res) => {
     const olid = req.params.olid;
     try {
         await bookService.addNote(olid, note, req.user.id);
-        res.redirect(`/books/${olid}`);
+        res.redirect(`/dashboard/books/${olid}`);
     } catch (err) {
         console.error(err);
         res.status(500).send('Error adding note.');

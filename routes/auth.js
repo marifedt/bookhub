@@ -16,7 +16,8 @@ router.get('/register', (req, res) => {
 router.post(
     '/login',
     passport.authenticate('local', {
-        successRedirect: '/',
+
+        successRedirect: '/dashboard',
         failureRedirect: '/login',
     })
 );
@@ -44,7 +45,7 @@ router.post('/register', async (req, res) => {
                     const user = result.rows[0];
                     req.login(user, (err) => {
                         console.log('success');
-                        res.redirect('/');
+                        res.redirect('/dashboard');
                     });
                 }
             });

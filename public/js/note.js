@@ -7,8 +7,8 @@ function toggleEdit(noteId) {
 
   const isEditing = noteDisplay.tagName.toLowerCase() === 'textarea';
 
-  if(!isEditing){
-    
+  if (!isEditing) {
+
     const currentContent = noteDisplay.textContent.trim();
     const textarea = document.createElement('textarea');
 
@@ -21,44 +21,44 @@ function toggleEdit(noteId) {
 
     editButton.style.display = 'none';
     saveButton.style.display = 'inline-block';
-    
-  } else{
+
+  } else {
     const updatedContent = noteDisplay.value;
 
-    axios.patch(`/books/${olid}/note/${noteId}`, {
+    axios.patch(`/dashboard/books/${olid}/note/${noteId}`, {
       content: updatedContent,
     })
-    .then((res) => {
-      if(res.data.success){
-        console.log(`Note ${noteId} updated successfully.`);
+      .then((res) => {
+        if (res.data.success) {
+          console.log(`Note ${noteId} updated successfully.`);
 
-        const newP = document.createElement('p');
-        newP.id = `noteContent-${noteId}`;
-        newP.className = 'text-gray-700 mb-2';
-        newP.textContent = updatedContent;
+          const newP = document.createElement('p');
+          newP.id = `noteContent-${noteId}`;
+          newP.className = 'text-gray-700 mb-2';
+          newP.textContent = updatedContent;
 
-        noteDisplay.parentNode.replaceChild(newP, noteDisplay);
+          noteDisplay.parentNode.replaceChild(newP, noteDisplay);
 
-        // Toggle buttons back
-        saveButton.style.display = 'none';
-        editButton.style.display = 'inline-block';
+          // Toggle buttons back
+          saveButton.style.display = 'none';
+          editButton.style.display = 'inline-block';
 
-        const newFormattedDate = res.data.formatted_date;
+          const newFormattedDate = res.data.formatted_date;
 
-        const dateElement = document.getElementById(`date-${noteId}`);
+          const dateElement = document.getElementById(`date-${noteId}`);
 
-        if (dateElement) {
+          if (dateElement) {
             dateElement.textContent = `Last updated on: ${newFormattedDate}`;
+          }
+        } else {
+          alert('Error saving note: Server response failed.')
         }
-      } else{
-        alert('Error saving note: Server response failed.')
-      }
-    })
-    .catch((error) =>{
-      console.error('Patch error: ', error);
-      alert('An error occurred while updating the note. Check server logs.');
-    })
-    
+      })
+      .catch((error) => {
+        console.error('Patch error: ', error);
+        alert('An error occurred while updating the note. Check server logs.');
+      })
+
   }
 
 }
