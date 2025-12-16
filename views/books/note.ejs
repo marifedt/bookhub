@@ -26,8 +26,8 @@
 
         <!-- Edit and Delete Options -->
         <div class="flex space-x-4 mb-8">
-            <a href="/edit/<%=book.olid%>" class="text-amber-600 hover:text-amber-700">Edit Book Details</a>
-            <form action="/delete/<%=book.olid%>" method="post" class="inline">
+            <a href="/dashboard/edit/<%=book.olid%>" class="text-amber-600 hover:text-amber-700">Edit Book Details</a>
+            <form action="/dashboard/delete/<%=book.olid%>" method="post" class="inline">
                 <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
             </form>
         </div>
@@ -43,30 +43,26 @@
                             <p id="noteContent-<%- note.id %>" class="text-gray-700 mb-2">
                                 <%= note.content %>
                             </p>
-                            <small id="date-<%= note.id %>" class="text-sm text-gray-500 mr-12">Last updated on: <%= note.formatted_date %></small>
+                            <small id="date-<%= note.id %>" class="text-sm text-gray-500 mr-12">Last updated on: <%=
+                                    note.formatted_date %></small>
                             <div class="ml-20" style="display: block;">
-                                <button 
-                                id="editBtn-<%= note.id %>" 
-                                onclick="toggleEdit('<%= note.id %>')"
-                                class="text-amber-600 hover:text-amber-700">
-                                Edit
-                            </button>
-                            <button
-                                id="saveBtn-<%= note.id %>"
-                                onclick="toggleEdit('<%= note.id %>')"
-                                class="text-amber-600 hover:text-amber-700"
-                                style="display:none;">
-                                Save
-                            </button>
+                                <button id="editBtn-<%= note.id %>" onclick="toggleEdit('<%= note.id %>')"
+                                    class="text-amber-600 hover:text-amber-700">
+                                    Edit
+                                </button>
+                                <button id="saveBtn-<%= note.id %>" onclick="toggleEdit('<%= note.id %>')"
+                                    class="text-amber-600 hover:text-amber-700" style="display:none;">
+                                    Save
+                                </button>
                             </div>
-                            
+
                         </article>
                         <% }); %>
                             <% } %>
         </div>
 
         <div class="mb-8">
-            <form action="/books/<%=book.olid%>/note" method="post" class="space-y-4">
+            <form action="/dashboard/books/<%=book.olid%>/note" method="post" class="space-y-4">
                 <label for="note" class="block text-gray-700 font-medium">Add a note:</label>
                 <textarea name="note" id="note" required
                     class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea><br />

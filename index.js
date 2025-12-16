@@ -49,7 +49,16 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login');
 };
 
-app.use('/', isAuthenticated, bookRoutes);
+
+app.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render('landing.ejs', { user: req.user });
+  } else {
+    res.render('landing.ejs', { user: null });
+  }
+});
+
+app.use('/dashboard', isAuthenticated, bookRoutes);
 
 // Handle 404 Requests
 app.use((req, res) => {

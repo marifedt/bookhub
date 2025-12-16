@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "tailwind:css": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch",
-    "dev": "nodemon index.js",
+    "build": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --minify",
+    "dev": "npx @tailwindcss/cli -i ./public/stylesheets/style.css -o ./public/stylesheets/output.css --watch & nodemon index.js",
     "start": "node index.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
